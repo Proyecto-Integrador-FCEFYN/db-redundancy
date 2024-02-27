@@ -2,6 +2,8 @@
 
 export ROOT=$(CURDIR)/debian/tmp
 export SBINDIR=$(ROOT)/usr/sbin
+export SYSCONFDIR = $(ROOT)/etc
+
 DPKG_EXPORT_BUILDFLAGS = 1
 
 %:
@@ -9,3 +11,4 @@ DPKG_EXPORT_BUILDFLAGS = 1
 
 override_dh_auto_install:
 	install -m 755 -p -D db-backup.py $(SBINDIR)/db-backup.py
+	install -m 600 -p -D db-backup-parameters $(SYSCONFDIR)/default/db-backup-parameters

@@ -6,4 +6,4 @@ if ! id -u dbbackupuser &>/dev/null; then
 fi
 
 # Instala pymongo para el usuario dbbackupuser
-sudo -u dbbackupuser pip3 install pymongo
+sudo -u dbbackupuser pip3 install pymongo==3.2.2

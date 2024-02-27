@@ -1,1 +1,2 @@
 usr/sbin/db-backup.py
+etc/default/db-backup-parameters

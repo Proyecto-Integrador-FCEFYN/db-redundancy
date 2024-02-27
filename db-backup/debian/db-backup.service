@@ -6,7 +6,8 @@ After=network-online.target
 Type=simple
 User=dbbackupuser
 Group=dbbackupuser
-ExecStart=/usr/bin/python3 /usr/sbin/db-backup.py --remote_ip 150.136.250.71 --remote_port 27017 --remote_user roberto --remote_password sanchez --remote_database_name djongo --local_ip localhost --local_port 27017  --local_database_name djongo2
+EnvironmentFile=/etc/default/db-backup-parameters
+ExecStart=/usr/bin/python3 /usr/sbin/db-backup.py --remote_ip $REMOTE_IP --remote_port $REMOTE_PORT --remote_user $REMOTE_USER --remote_password $REMOTE_PASSWORD --remote_database_name $REMOTE_DATABASE_NAME --local_ip $LOCAL_IP --local_port $LOCAL_PORT  --local_database_name $LOCAL_DATABASE --poling_secs $POLING_SECS
 
 [Install]
 WantedBy=multi-user.target
