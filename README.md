@@ -15,6 +15,14 @@ dpkg-buildpackage -us -uc -d
 
 El .deb se encontrará en la ruta db-redundancy/
 
+### Instalación
+```bash
+sudo dpkg -i db-backup_1.0_amd64.deb
+```
+### Desinstalación
+```bash
+sudo apt-get -y remove db-backup
+```
 ## Output de ejemplo
 
 ```bash
@@ -100,4 +108,8 @@ Handling 1 logs
 
 rotating pattern: /home/dbbackupuser/db_backup.log  hourly (3 rotations)
 empty log files are rotated, old logs are removed
+considering log /home/dbbackupuser/db_backup.log
+  log /home/dbbackupuser/db_backup.log does not exist -- skipping
+Creating new state
+Paquete db-backup instalado con éxito
 ```

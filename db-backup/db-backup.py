@@ -8,16 +8,11 @@ import argparse, socket, sys, os
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from time import sleep
+import logging
 
-# Redirigir stdout a un archivo específico
-log_file = '/home/dbbackupuser/db_backup.log'
+# Configuración básica del registro
+logging.basicConfig(filename='/home/dbbackupuser/db_backup.log', level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-# Verificar si el archivo de registro existe, si no, crearlo
-if not os.path.exists(log_file):
-    open(log_file, 'a').close()
-
-# Redirigir stdout a un archivo específico
-sys.stdout = open(log_file, 'a')
 
 def create_connection_uri(ip, port, user, password):
     if user and password:
@@ -60,8 +55,6 @@ def backup_mongodb(remote_ip, remote_port, remote_user, remote_password, remote_
         local_client = MongoClient(local_uri)
         local_db = local_client[remote_database_name]
 
-    print("URIS: ", remote_uri , local_uri)
-
     collections = remote_db.collection_names()
     collections = [coll for coll in collections if not coll.startswith("django_") and coll != "__schema__"]
 
@@ -79,15 +72,15 @@ def backup_mongodb(remote_ip, remote_port, remote_user, remote_password, remote_
             try:
                 if existing_document:
                     local_db[collection_name].replace_one({'_id': document_id}, document)
-                    print(f"Documento actualizado en {collection_name}")
+                    logging.info(f"Documento actualizado en {collection_name}")
                 else:
                     local_db[collection_name].insert_one(document)
-                    print(f"Documento insertado en {collection_name}")
+                    logging.info(f"Documento insertado en {collection_name}")
             except DuplicateKeyError:
-                print(f"No se pudo insertar/actualizar documento en {collection_name} debido a una clave duplicada no detectada")
+                logging.info(f"No se pudo insertar/actualizar documento en {collection_name} debido a una clave duplicada no detectada")
                 continue
 
-    print("Backup completado con éxito.")
+    logging.info("Backup completado con éxito.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Script para realizar backup de base de datos MongoDB')
@@ -112,26 +105,26 @@ if __name__ == "__main__":
     while True:
         available = test_connection_to_db(args.remote_ip, args.remote_port)
         if available:
-            print('Base DEFAULT conectada.')
+            logging.info('Base DEFAULT conectada.')
             try:
                 backup_mongodb(args.remote_ip, args.remote_port, args.remote_user, args.remote_password, args.remote_database_name,
                    args.local_ip, args.local_port, args.local_user, args.local_password, args.local_database_name, from_remote_to_local=True)
             except Exception as e:
-                print('Error: '+ str(e) )
-                print('EXIT')
+                logging.info('Error: '+ str(e) )
+                logging.info('EXIT')
             sleep(args.polling_secs)
         else:
             while(not available):
-                print('Error en base DEFAULT. Esperando a que vuelva...')
+                logging.info('Error en base DEFAULT. Esperando a que vuelva...')
                 sleep(5)
                 available = test_connection_to_db(args.remote_ip, args.remote_port)
             try:
-                print('Retornó base DEFAULT. Recuperando datos guardados en backup.')
+                logging.info('Retornó base DEFAULT. Recuperando datos guardados en backup.')
                 backup_mongodb(args.remote_ip, args.remote_port, args.remote_user, args.remote_password, args.remote_database_name,
                    args.local_ip, args.local_port, args.local_user, args.local_password, args.local_database_name, from_remote_to_local=False)
             except Exception as e:
-                print('Error: '+ str(e) )
-                print('EXIT')
+                logging.info('Error: '+ str(e) )
+                logging.info('EXIT')
 
 
 # Backup completado con éxito.
