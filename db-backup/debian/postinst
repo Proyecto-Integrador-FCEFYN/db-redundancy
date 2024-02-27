@@ -7,3 +7,10 @@ if [ -x "/bin/systemctl" ]; then
     systemctl enable db-backup.service || true
     systemctl start db-backup.service || true
 fi
+
+# Agregar configuración de logrotate
+logrotate /home/dbbackupuser/logrotate.conf --state /home/dbbackupuser/logrotate-state --verbose
+
+# Agregar línea a la tabla cron del usuario dbbackupuser
+sudo -u dbbackupuser bash -c "echo '15 * * * * /usr/sbin/logrotate /home/dbbackupuser/logrotate.conf --state /home/dbbackupuser/logrotate-state' > /tmp/dbbackupuser_cron"
+sudo mv /tmp/dbbackupuser_cron /var/spool/cron/crontabs/dbbackupuser

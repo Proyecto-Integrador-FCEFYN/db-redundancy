@@ -4,10 +4,20 @@
 # python3 backup-periodico-3.py --remote_ip 150.136.250.71 --remote_port 27017 --remote_user roberto --remote_password sanchez --remote_database_name djongo --local_ip localhost --local_port 27017  --local_database_name djongo2
 ##
 
-import argparse, socket
+import argparse, socket, sys, os
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from time import sleep
+
+# Redirigir stdout a un archivo específico
+log_file = '/home/dbbackupuser/db_backup.log'
+
+# Verificar si el archivo de registro existe, si no, crearlo
+if not os.path.exists(log_file):
+    open(log_file, 'a').close()
+
+# Redirigir stdout a un archivo específico
+sys.stdout = open(log_file, 'a')
 
 def create_connection_uri(ip, port, user, password):
     if user and password:
