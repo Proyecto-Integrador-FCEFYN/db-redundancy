@@ -1,0 +1,12 @@
+[Unit]
+Description=Database backup manager
+After=network-online.target
+
+[Service]
+Type=simple
+User=dbbackupuser
+Group=dbbackupuser
+ExecStart=/usr/bin/python3 /usr/sbin/db-backup.py --remote_ip 150.136.250.71 --remote_port 27017 --remote_user roberto --remote_password sanchez --remote_database_name djongo --local_ip localhost --local_port 27017  --local_database_name djongo2
+
+[Install]
+WantedBy=multi-user.target
