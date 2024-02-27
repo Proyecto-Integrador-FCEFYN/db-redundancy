@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Crea el usuario dbbackupuser si no existe
+if ! id -u dbbackupuser &>/dev/null; then
+    sudo adduser --system --group --disabled-password --home /home/dbbackupuser dbbackupuser
+fi
+
+# Instala pymongo para el usuario dbbackupuser
+sudo -u dbbackupuser pip3 install pymongo

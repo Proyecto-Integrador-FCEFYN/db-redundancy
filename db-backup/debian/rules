@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+export ROOT=$(CURDIR)/debian/tmp
+export SBINDIR=$(ROOT)/usr/sbin
+DPKG_EXPORT_BUILDFLAGS = 1
+
+%:
+	dh $@ --with=systemd
+
+override_dh_auto_install:
+	install -m 755 -p -D db-backup.py $(SBINDIR)/db-backup.py
