@@ -102,7 +102,8 @@ if __name__ == "__main__":
     parser.add_argument('--local_user', default=None, help='Usuario de la base de datos local')
     parser.add_argument('--local_password', default=None, help='Contraseña de la base de datos local')
     parser.add_argument('--local_database_name', required=True, help='Nombre de la base de datos local')
-    parser.add_argument('--poling_secs', default=30, type=int, help='Cantidad de segundos de poling entre actualizaciones')
+
+    parser.add_argument('--polling_secs', default=30, type=int, help='Cantidad de segundos de polling entre actualizaciones')
 
     args = parser.parse_args()
 
@@ -118,7 +119,7 @@ if __name__ == "__main__":
             except Exception as e:
                 print('Error: '+ str(e) )
                 print('EXIT')
-            sleep(args.poling_secs)
+            sleep(args.polling_secs)
         else:
             while(not available):
                 print('Error en base DEFAULT. Esperando a que vuelva...')

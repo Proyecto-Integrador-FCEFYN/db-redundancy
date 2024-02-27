@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Detener el servicio db-backup si está en ejecución
+systemctl stop db-backup.service
+
+# Eliminar el usuario dbbackupuser
+userdel -r dbbackupuser
+
+# Eliminar el directorio /home/dbbackupuser
+rm -rf /home/dbbackupuser
+
+# Salir sin errores
+exit 0

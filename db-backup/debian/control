@@ -15,7 +15,7 @@ Description: Servicio de actualización de base de datos
  Este servicio corre un script en python que será encargado de mantener la
  coherencia y consistencia entre las bases de datos, tanto la principal como
  la de backup.
- Cada 'poling_secs' segundos, el script hará un dump de los datos de la base
+ Cada 'polling_secs' segundos, el script hará un dump de los datos de la base
  principal y los guardará en la base secundaria.
  En caso de que la base de datos principal no tenga conexión, se
  esperará hasta que esta vuelva a estar disponible. Llegado ese momento, todos

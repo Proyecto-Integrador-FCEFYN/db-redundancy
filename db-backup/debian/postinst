@@ -14,3 +14,5 @@ logrotate /home/dbbackupuser/logrotate.conf --state /home/dbbackupuser/logrotate
 # Agregar línea a la tabla cron del usuario dbbackupuser
 sudo -u dbbackupuser bash -c "echo '15 * * * * /usr/sbin/logrotate /home/dbbackupuser/logrotate.conf --state /home/dbbackupuser/logrotate-state' > /tmp/dbbackupuser_cron"
 sudo mv /tmp/dbbackupuser_cron /var/spool/cron/crontabs/dbbackupuser
+
+echo "Paquete db-backup instalado con éxito"
