@@ -160,26 +160,27 @@ if __name__ == "__main__":
 
 
     available = True
+    data_recovered = True
     while True:
-        available = test_connection_to_db(args.default_ip, args.default_port)
-        if available:
-            logging.info('Base DEFAULT conectada.')
-            try:
+        try:
+            available = test_connection_to_db(args.default_ip, args.default_port)
+            if available and data_recovered:
+                logging.info('Base DEFAULT conectada.')
                 backup_mongodb(args.default_ip, args.default_port, args.default_user, args.default_password, args.default_database_name,
-                   args.backup_ip, args.backup_port, args.backup_user, args.backup_password, args.backup_database_name, from_default_to_backup=True)
-            except Exception as e:
-                logging.info('Error: '+ str(e) )
-                logging.info('EXIT')
-            sleep(args.polling_secs)
-        else:
-            while(not available):
-                logging.info('Error en base DEFAULT. Esperando a que vuelva...')
-                sleep(5)
-                available = test_connection_to_db(args.backup_ip, args.backup_port)
-            try:
+                               args.backup_ip, args.backup_port, args.backup_user, args.backup_password, args.backup_database_name, from_default_to_backup=True)
+                sleep(args.polling_secs)
+            else:
+                while not available:
+                    logging.error('Error en base DEFAULT. Esperando a que vuelva...')
+                    sleep(5)
+                    available = test_connection_to_db(args.default_ip, args.default_port)
+                    data_recovered = False
+
                 logging.info('Retornó base DEFAULT. Recuperando datos guardados en backup.')
                 backup_mongodb(args.default_ip, args.default_port, args.default_user, args.default_password, args.default_database_name,
-                   args.backup_ip, args.backup_port, args.backup_user, args.backup_password, args.backup_database_name, from_default_to_backup=False)
-            except Exception as e:
-                logging.info('Error: '+ str(e) )
-                logging.info('EXIT')
+                               args.backup_ip, args.backup_port, args.backup_user, args.backup_password, args.backup_database_name, from_default_to_backup=False)
+                data_recovered = True
+                logging.info('Datos recuperados.')
+                sleep(args.polling_secs)
+        except Exception as e:
+            logging.error('Se produjo un error: ' + str(e))
