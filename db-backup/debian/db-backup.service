@@ -7,7 +7,7 @@ Type=simple
 User=dbbackupuser
 Group=dbbackupuser
 EnvironmentFile=/etc/default/db-backup-parameters
-ExecStart=/usr/bin/python3 /usr/sbin/db-backup.py --remote_ip $REMOTE_IP --remote_port $REMOTE_PORT --remote_user $REMOTE_USER --remote_password $REMOTE_PASSWORD --remote_database_name $REMOTE_DATABASE_NAME --local_ip $LOCAL_IP --local_port $LOCAL_PORT  --local_database_name $LOCAL_DATABASE --polling_secs $POLLING_SECS
+ExecStart=/usr/bin/python3 /usr/sbin/db-backup.py --backup_ip $BACKUP_IP --backup_port $BACKUP_PORT --backup_user $BACKUP_USER --backup_password $BACKUP_PASSWORD --backup_database_name $BACKUP_DATABASE_NAME --default_ip $DEFAULT_IP --default_port $DEFAULT_PORT  --default_database_name $DEFAULT_DATABASE --polling_secs $POLLING_SECS
 Restart=on-failure
 RestartSec=5s
 
